@@ -62,13 +62,14 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface{
         entered: msg.value,
         required: i_fee
       });
+    }
     if (s_RaffleState != RaffleState.OPEN){
       revert NotOpen();
     }
       s_players.push(payable(msg.sender));
       emit NewPlayer(msg.sender);
     }
-  }
+  
 
   function checkUpkeep(bytes memory /*checkData */) public override returns(bool upkeepNeeded, bytes memory /*performData*/) {
     bool isOpen = (RaffleState.OPEN == s_RaffleState);
@@ -109,26 +110,32 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface{
     emit NewWinner(recentWinner);
     }
 
-    function  getRecentWinner() public view returns(address) {
+  function  getRecentWinner() public view returns(address) {
       return s_recentWinner;
     }
-        function  getNumWords() public pure returns(uint) {
+  function  getNumWords() public pure returns(uint) {
       return NUM_WORDS;
     }
-        function  getRaffleState() public view returns(RaffleState) {
-      return s_RaffleState;
+  function  getRaffleState() public view returns(RaffleState) {
+    return s_RaffleState;
     }
-        function  getPlayers() public view returns(uint) {
+  function getPlayers() public view returns(uint) {
       return s_players.length;
     }
-        function  getLatestTimestamp() public view returns(uint) {
+      function getPlayer(uint _index) public view returns(address) {
+      return s_players[_index];
+    }
+  function  getLastTimestamp() public view returns(uint) {
       return s_lastTimestamp;
     }
-    function getReqConf() public pure returns(uint){
+  function getReqConf() public pure returns(uint){
       return REQUEST_CONF;
     }
-        function getEntranceFee() public view returns(uint){
+  function getEntranceFee() public view returns(uint){
       return i_fee;
+    }
+  function getInterval() public view returns(uint){
+      return i_interval;
     }
 
   // to support receiving ETH by default
