@@ -1,9 +1,8 @@
 const { ethers, getNamedAccounts, deployments, network } = require('hardhat')
 const { use, expect, assert } = require('chai')
 const { solidity } = require('ethereum-waffle')
-const { networkConfig } = require('../helper-hardhat-config')
+const { networkConfig } = require('../../helper-hardhat-config')
 const { resolveConfig } = require('prettier')
-const { devChain } = require('../../helper-hardhat-config')
 const localChainId = '31337'
 
 use(solidity)
@@ -17,7 +16,7 @@ describe('My Dapp', function () {
     setTimeout(done, 2000)
   })
 
-  chainId !== localChainId
+  chainId === localChainId
     ? describe.skip
     : describe('Raffle', function () {
         beforeEach(async function () {
