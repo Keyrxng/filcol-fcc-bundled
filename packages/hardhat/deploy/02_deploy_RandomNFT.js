@@ -27,6 +27,11 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   let gasLane = networkConfig[chainId]['gasLane']
   let callbackGas = networkConfig[chainId]['callbackGas']
   let interval = networkConfig[chainId]['interval']
+  let dogURIs = [
+    'ipfs://QmaVkBn2tKmjbhphU7eyztbvSQU5EXDdqRyXZtRhSGgJGo',
+    'ipfs://QmYQC5aGZu2PTH8XzbJrbDnvhj3gVs7ya33H9mqUNvST3d',
+    'ipfs://QmZYmH5iDbD6v3U2ixoVAjioSzvWJszDzYdbeCLquGSpVm',
+  ]
 
   if (chainId === localChainId) {
     log('local network detected! Deploying mocks...')
@@ -52,23 +57,35 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     console.log('deployerAddr: ', deployer)
   }
 
-  const Raffle = await deploy('Raffle', {
+  log('------------------------------------')
+
+  const args = [
+    dogURIs,
+    vrfCoordV2Addr,
+    fee,
+    gasLane,
+    subId,
+    callbackGas,
+    interval,
+  ]
+
+  const RandomIpfsNFT = await deploy('RandomIpfsNFT', {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
-    args: [vrfCoordV2Addr, fee, gasLane, subId, callbackGas, interval],
+    args: args,
     log: true,
     waitConfirmations: 1,
   })
 
   // Getting a previously deployed contract
-  // const Raffle = await ethers.getContract('Raffle', deployer)
-  /*  await Raffle.setPurpose("Hello");
+  // const RandomIpfsNFT = await ethers.getContract('RandomIpfsNFT', deployer)
+  /*  await RandomIpfsNFT.setPurpose("Hello");
   
-    To take ownership of Raffle using the ownable library uncomment next line and add the 
+    To take ownership of RandomIpfsNFT using the ownable library uncomment next line and add the 
     address you want to be the owner. 
-    // await Raffle.transferOwnership(YOUR_ADDRESS_HERE);
+    // await RandomIpfsNFT.transferOwnership(YOUR_ADDRESS_HERE);
 
-    //const Raffle = await ethers.getContractAt('Raffle', "0xaAC799eC2d00C013f1F11c37E654e59B0429DF6A") //<-- if you want to instantiate a version of a contract at a specific address!
+    //const RandomIpfsNFT = await ethers.getContractAt('RandomIpfsNFT', "0xaAC799eC2d00C013f1F11c37E654e59B0429DF6A") //<-- if you want to instantiate a version of a contract at a specific address!
   */
 
   /*
@@ -82,7 +99,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
 
   /*
   //If you want to send some ETH to a contract on deploy (make your constructor payable!)
-  const Raffle = await deploy("Raffle", [], {
+  const RandomIpfsNFT = await deploy("RandomIpfsNFT", [], {
   value: ethers.utils.parseEther("0.05")
   });
   */
@@ -90,7 +107,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   /*
   //If you want to link a library into your contract:
   // reference: https://github.com/austintgriffith/scaffold-eth/blob/using-libraries-example/packages/hardhat/scripts/deploy.js#L19
-  const Raffle = await deploy("Raffle", [], {}, {
+  const RandomIpfsNFT = await deploy("RandomIpfsNFT", [], {}, {
    LibraryName: **LibraryAddress**
   });
   */
@@ -102,8 +119,8 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   try {
     if (chainId !== localChainId) {
       await run('verify:verify', {
-        address: Raffle.address,
-        contract: 'contracts/Raffle.sol:Raffle',
+        address: RandomIpfsNFT.address,
+        contract: 'contracts/RandomIpfsNFT.sol:RandomIpfsNFT',
         constructorArguments: [
           vrfCoordV2Addr,
           fee,
@@ -118,4 +135,4 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     console.error(error)
   }
 }
-module.exports.tags = ['all', 'Raffle']
+module.exports.tags = ['all', 'RandomIpfsNFT']

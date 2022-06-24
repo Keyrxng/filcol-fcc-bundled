@@ -297,6 +297,15 @@ module.exports = {
         },
       },
       {
+        version: '0.8.7',
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 2000000,
+          },
+        },
+      },
+      {
         version: '0.6.12',
         settings: {
           optimizer: {

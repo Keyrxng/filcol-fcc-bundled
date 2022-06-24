@@ -34,6 +34,15 @@ async function main() {
   const daiTokenAddr = '0x6B175474E89094C44Da98b954EedeAC495271d0F'
   await borrowDAI(daiTokenAddr, lendingPool, amountDaiToBorrowWei, deployer)
   await getUserBorrowData(lendingPool, deployer)
+  await repayDai(amountDaiToBorrowWei, daiTokenAddr, lendingPool, deployer)
+  await getUserBorrowData(lendingPool, deployer)
+}
+
+async function repayDai(amount, daiTokenAddr, lendingPool, account) {
+  await approveERC20(daiTokenAddr, lendingPool.address, amount, account)
+  const repayTx = await lendingPool.repay(daiTokenAddr, amount, 1, account)
+  await repayTx.wait(1)
+  console.log('repaid!')
 }
 
 async function borrowDAI(daiAddr, lendingPool, amountDaiToBorrowWei, account) {
